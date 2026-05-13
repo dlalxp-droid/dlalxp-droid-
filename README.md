@@ -1,1 +1,0 @@
-# dlalxp-droid.github.io
