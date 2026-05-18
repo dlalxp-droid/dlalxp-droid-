@@ -192,10 +192,10 @@ def draw_checklist(base, progress_per_item):
     ]
     font = f(NANUM_P, 52)
     sub_font = f(NANUM_P, 36)
-    y_start = 1240
+    y_start = 1230
     x_box = 180
     x_text = 248
-    row_h = 62
+    row_h = 58
 
     for i, (title, sub, hl) in enumerate(items):
         box_p, check_p = progress_per_item[i]
@@ -245,20 +245,19 @@ def draw_checklist(base, progress_per_item):
             ld.text((title_w + 14, 14), sub, fill=PENCIL+(a_box,), font=sub_font)
         base.alpha_composite(layer, (x_text, y))
 
-    disc_font = f(HIM_P, 32)
+    disc_font = f(HIM_P, 30)
     disc = "* 보험사·상품별로 달라질 수 있어요"
-    bd = ImageDraw.Draw(base)
-    layer = Image.new('RGBA', (W, 50), (0,0,0,0))
+    layer = Image.new('RGBA', (W, 38), (0,0,0,0))
     ld = ImageDraw.Draw(layer)
     b = ld.textbbox((0,0), disc, font=disc_font)
     tx = (W - (b[2]-b[0]))//2
     ld.text((tx, 0), disc, fill=PENCIL+(190,), font=disc_font)
-    base.alpha_composite(layer, (0, y_start + 5 * row_h + 6))
+    base.alpha_composite(layer, (0, y_start + 5 * row_h + 4))
 
 def draw_star_bonus(base, star_progress=1.0, text_progress=1.0):
-    sx, sy = 210, 1592
+    sx, sy = 210, 1605
     if star_progress > 0:
-        size = 34
+        size = 32
         pts = []
         for i in range(10):
             angle = -math.pi/2 + i * math.pi/5
@@ -277,14 +276,14 @@ def draw_star_bonus(base, star_progress=1.0, text_progress=1.0):
         ld = ImageDraw.Draw(layer)
         text = "증권 한 장이면 다 점검돼요"
         ld.text((0, 0), text, fill=INK+(a,), font=font)
-        base.alpha_composite(layer, (260, 1572))
+        base.alpha_composite(layer, (260, 1583))
 
 def draw_cta(base, progress=1.0):
     if progress <= 0: return
     off = int(60 * (1 - progress))
     a = int(255 * progress)
-    sw, sh = 860, 220
-    pad = 30
+    sw, sh = 860, 200
+    pad = 26
     layer = Image.new('RGBA', (sw+pad*2, sh+pad*2), (0,0,0,0))
     ld = ImageDraw.Draw(layer)
     ld.rectangle([pad+8, pad+10, pad+sw+8, pad+sh+10], fill=(0,0,0,55))
@@ -302,11 +301,11 @@ def draw_cta(base, progress=1.0):
     txid = pad + (sw - (bid[2]-bid[0]))//2
     tx1  = pad + (sw - (b1[2]-b1[0]))//2
     tx2  = pad + (sw - (b2[2]-b2[0]) - 56)//2
-    ld.text((txid, pad+8),  line_id, fill=RED_INK+(a,), font=font_id)
-    ld.text((tx1,  pad+62), line1,   fill=INK+(a,),     font=font_big)
-    ld.text((tx2,  pad+140), line2,  fill=INK+(a,),     font=font_med)
+    ld.text((txid, pad+4),  line_id, fill=RED_INK+(a,), font=font_id)
+    ld.text((tx1,  pad+58), line1,   fill=INK+(a,),     font=font_big)
+    ld.text((tx2,  pad+128), line2,  fill=INK+(a,),     font=font_med)
     ex = tx2 + (b2[2]-b2[0]) + 14
-    ey = pad + 152
+    ey = pad + 140
     ld.rectangle([ex, ey, ex+44, ey+30], fill=(255,255,255,a), outline=RED_INK+(a,), width=3)
     ld.line([(ex, ey), (ex+22, ey+17), (ex+44, ey)], fill=RED_INK+(a,), width=3)
     rot = layer.rotate(-2, resample=Image.BICUBIC, expand=True)
