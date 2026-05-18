@@ -192,10 +192,10 @@ def draw_checklist(base, progress_per_item):
     ]
     font = f(NANUM_P, 52)
     sub_font = f(NANUM_P, 36)
-    y_start = 1270
+    y_start = 1240
     x_box = 180
     x_text = 248
-    row_h = 66
+    row_h = 62
 
     for i, (title, sub, hl) in enumerate(items):
         box_p, check_p = progress_per_item[i]
@@ -256,9 +256,9 @@ def draw_checklist(base, progress_per_item):
     base.alpha_composite(layer, (0, y_start + 5 * row_h + 6))
 
 def draw_star_bonus(base, star_progress=1.0, text_progress=1.0):
-    sx, sy = 210, 1668
+    sx, sy = 210, 1592
     if star_progress > 0:
-        size = 38
+        size = 34
         pts = []
         for i in range(10):
             angle = -math.pi/2 + i * math.pi/5
@@ -277,35 +277,41 @@ def draw_star_bonus(base, star_progress=1.0, text_progress=1.0):
         ld = ImageDraw.Draw(layer)
         text = "증권 한 장이면 다 점검돼요"
         ld.text((0, 0), text, fill=INK+(a,), font=font)
-        base.alpha_composite(layer, (260, 1646))
+        base.alpha_composite(layer, (260, 1572))
 
 def draw_cta(base, progress=1.0):
     if progress <= 0: return
     off = int(60 * (1 - progress))
     a = int(255 * progress)
-    sw, sh = 860, 170
+    sw, sh = 860, 220
     pad = 30
     layer = Image.new('RGBA', (sw+pad*2, sh+pad*2), (0,0,0,0))
     ld = ImageDraw.Draw(layer)
     ld.rectangle([pad+8, pad+10, pad+sw+8, pad+sh+10], fill=(0,0,0,55))
     ld.rectangle([pad, pad, pad+sw, pad+sh], fill=STICKY+(a,))
     ld.polygon([(pad+sw, pad+sh-32), (pad+sw, pad+sh), (pad+sw-32, pad+sh)], fill=STICKY_DK+(a,))
+    font_id  = f(GAMJA_P, 50)
     font_big = f(GAMJA_P, 58)
     font_med = f(NANUM_P, 46)
-    line1 = '댓글에 "정보" 남기면'
-    line2 = "DM으로 증권 분석 안내드려요"
-    b1 = ld.textbbox((0,0), line1, font=font_big)
-    b2 = ld.textbbox((0,0), line2, font=font_med)
-    tx1 = pad + (sw - (b1[2]-b1[0]))//2
-    tx2 = pad + (sw - (b2[2]-b2[0]) - 56)//2
-    ld.text((tx1, pad+12), line1, fill=INK+(a,), font=font_big)
-    ld.text((tx2, pad+90), line2, fill=INK+(a,), font=font_med)
+    line_id = "@gi_seong_5253"
+    line1   = '댓글에 "정보" 남기면'
+    line2   = "DM으로 증권 분석 안내드려요"
+    bid = ld.textbbox((0,0), line_id, font=font_id)
+    b1  = ld.textbbox((0,0), line1, font=font_big)
+    b2  = ld.textbbox((0,0), line2, font=font_med)
+    txid = pad + (sw - (bid[2]-bid[0]))//2
+    tx1  = pad + (sw - (b1[2]-b1[0]))//2
+    tx2  = pad + (sw - (b2[2]-b2[0]) - 56)//2
+    ld.text((txid, pad+8),  line_id, fill=RED_INK+(a,), font=font_id)
+    ld.text((tx1,  pad+62), line1,   fill=INK+(a,),     font=font_big)
+    ld.text((tx2,  pad+140), line2,  fill=INK+(a,),     font=font_med)
     ex = tx2 + (b2[2]-b2[0]) + 14
-    ey = pad + 102
+    ey = pad + 152
     ld.rectangle([ex, ey, ex+44, ey+30], fill=(255,255,255,a), outline=RED_INK+(a,), width=3)
     ld.line([(ex, ey), (ex+22, ey+17), (ex+44, ey)], fill=RED_INK+(a,), width=3)
     rot = layer.rotate(-2, resample=Image.BICUBIC, expand=True)
-    base.alpha_composite(rot, ((W - rot.width)//2, 1735 + off - 20))
+    y_paste = H - rot.height - 8 + off
+    base.alpha_composite(rot, ((W - rot.width)//2, y_paste))
 
 def render_frame(frame_idx, save_path=None):
     t = frame_idx / FPS
