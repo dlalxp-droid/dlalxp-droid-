@@ -88,52 +88,56 @@ def draw_final_disclosure(base, t):
     layer = Image.new('RGBA', (W, H), (0, 0, 0, 0))
     ld = ImageDraw.Draw(layer)
 
-    title_font  = _f(GAMJA_P, 96)
-    label_font  = _f(GAMJA_P, 52)
-    body_font   = _f(NANUM_P, 46)
-    body_red    = _f(NANUM_P, 46)
-    small_font  = _f(NANUM_P, 36)
+    title_font = _f(GAMJA_P, 104)
+    label_font = _f(GAMJA_P, 60)
+    body_font  = _f(NANUM_P, 52)
+    small_font = _f(NANUM_P, 42)
 
     # 타이틀
     title = "※ 필수 고지사항"
     b = ld.textbbox((0, 0), title, font=title_font)
     tx = (W - (b[2] - b[0])) // 2
-    ld.text((tx, 120), title, fill=RED_INK + (a,), font=title_font)
+    ld.text((tx, 110), title, fill=RED_INK + (a,), font=title_font)
 
     # 가로 줄
-    ld.line([(140, 240), (W - 140, 240)], fill=INK + (a,), width=3)
+    ld.line([(120, 250), (W - 120, 250)], fill=INK + (a,), width=3)
 
-    y = 290
-    # 설계사
-    agent_label = "설계사"
-    ld.text((140, y), agent_label, fill=PENCIL + (a,), font=label_font)
-    y += 60
-    ld.text((140, y), "프라임에셋  박기성", fill=INK + (a,), font=body_font)
-    y += 60
-    ld.text((140, y), "손·생보 협회 등록번호  202511200002261",
-            fill=INK + (a,), font=small_font)
-    y += 80
+    LEFT = 130
+    y = 310
 
-    # 심의필
-    ld.text((140, y), "심의필", fill=PENCIL + (a,), font=label_font)
-    y += 60
-    ld.text((140, y), "제 [----] 호  ( ---- ~ ---- )",
+    # ─── 설계사 ───
+    ld.text((LEFT, y), "설계사", fill=PENCIL + (a,), font=label_font)
+    y += 76
+    ld.text((LEFT, y), "프라임에셋  박기성", fill=INK + (a,), font=body_font)
+    y += 66
+    ld.text((LEFT, y), "협회 등록번호  202511200002261",
             fill=INK + (a,), font=body_font)
-    y += 60
-    ld.text((140, y), "본 광고는 광고심의기준을 준수하였으며,",
-            fill=PENCIL + (a,), font=small_font)
-    y += 44
-    ld.text((140, y), "유효기간은 심의일로부터 1년입니다.",
-            fill=PENCIL + (a,), font=small_font)
-    y += 80
+    y += 110
 
-    # 승환계약 안내
-    for line, is_label in SWITCH_LINES:
-        if is_label:
-            ld.text((140, y), line, fill=RED_INK + (a,), font=label_font)
-            y += 60
-        else:
-            ld.text((140, y), line, fill=INK + (a,), font=small_font)
-            y += 46
+    # ─── 심의필 ───
+    ld.text((LEFT, y), "심의필", fill=PENCIL + (a,), font=label_font)
+    y += 76
+    ld.text((LEFT, y), "제 [----] 호  ( ---- ~ ---- )",
+            fill=INK + (a,), font=body_font)
+    y += 66
+    ld.text((LEFT, y), "본 광고는 광고심의기준을 준수하였으며,",
+            fill=PENCIL + (a,), font=small_font)
+    y += 52
+    ld.text((LEFT, y), "유효기간은 심의일로부터 1년입니다.",
+            fill=PENCIL + (a,), font=small_font)
+    y += 110
+
+    # ─── 승환계약 안내 ───
+    ld.text((LEFT, y), "[승환계약 안내]", fill=RED_INK + (a,), font=label_font)
+    y += 80
+    for line in [
+        "기존 계약 해지 후 새 계약 체결 과정에서",
+        "1. 질병이력·연령증가 등으로 가입이 거절되거나",
+        "    보험료가 인상될 수 있습니다.",
+        "2. 가입 상품에 따라 새로운 면책기간 적용 및",
+        "    보장 제한 등 기타 불이익이 발생할 수 있습니다.",
+    ]:
+        ld.text((LEFT, y), line, fill=INK + (a,), font=small_font)
+        y += 56
 
     base.alpha_composite(layer, (0, 0))
