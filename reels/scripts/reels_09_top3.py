@@ -4,6 +4,8 @@
 """
 import os, math, random, sys
 from PIL import Image, ImageDraw, ImageFont
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from reels_overlay import draw_bottom_disclaimer, draw_final_disclosure
 
 W, H = 1080, 1920
 FPS = 30
@@ -309,7 +311,7 @@ def draw_cta(base, progress=1.0):
     ld.rectangle([ex, ey, ex+44, ey+30], fill=(255,255,255,a), outline=RED_INK+(a,), width=3)
     ld.line([(ex, ey), (ex+22, ey+17), (ex+44, ey)], fill=RED_INK+(a,), width=3)
     rot = layer.rotate(-2, resample=Image.BICUBIC, expand=True)
-    y_paste = H - rot.height - 8 + off
+    y_paste = 1810 - rot.height - 8 + off
     base.alpha_composite(rot, ((W - rot.width)//2, y_paste))
 
 def render_frame(frame_idx, save_path=None):
@@ -349,6 +351,9 @@ def render_frame(frame_idx, save_path=None):
     draw_checklist(img, check_items)
     draw_star_bonus(img, p_star, p_bonus)
     draw_cta(img, p_cta)
+
+    draw_bottom_disclaimer(img, t)
+    draw_final_disclosure(img, t)
 
     if save_path:
         img.convert('RGB').save(save_path)
